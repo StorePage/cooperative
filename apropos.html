@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>À propos - Nom de l'entreprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2d7a4f;
+            --primary-light: #e8f5ee;
+            --primary-dark: #1a5535;
+            --background: #faf8f4;
+            --accent: #c8922a;
+            --text: #1c2b1e;
+            --text-muted: #6b7c6e;
+            --border: #e4ede7;
+            --white: #ffffff;
+            --shadow: 0 4px 24px rgba(45,122,79,0.1);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        /* ----- NAVBAR DYNAMIQUE ----- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(250,248,244,0.94);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: transform 0.3s ease;
+        }
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-logo img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+        .nav-brand small {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        @media(max-width: 850px){
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                border-top: 1px solid var(--border);
+                padding-top: 10px;
+                gap: 15px;
+            }
+        }
+
+        /* ----- CONTENU ----- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        h2 {
+            color: var(--primary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        p { line-height: 1.8; color: #555; margin-bottom: 1rem; text-align: left; }
+        .president-section {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .president-section h3 { color: var(--primary-dark); margin-bottom: 10px; }
+        .president-section p { text-align: center; margin: 0; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+            gap: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .info-card {
+            background: #fdfdfd;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+        .info-card h3 { margin-bottom: 10px; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        .products-list-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+            margin-top: 20px;
+        }
+        @media (max-width:700px){
+            .products-list-container { grid-template-columns: 1fr; }
+        }
+        .product-list { list-style: none; }
+        .product-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            color: #444;
+        }
+        .product-list li i { color: var(--primary); margin-right: 8px; }
+
+        footer {
+            margin-top: 40px;
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.65);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 0.8rem;
+        }
+        footer a { color: rgba(200,169,100,0.9); text-decoration: none; }
+        footer strong { color: #fff; }
+    </style>
+</head>
+<body>
+    <nav id="mainNav">
+        <div class="nav-logo">
+            <img src="images/logo-entreprise.jpg" alt="Logo">
+            <div class="nav-brand">
+                <span>Nom de l'entreprise</span>
+                <small>Produits naturels · Local</small>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Accueil</a>
+            <a href="produits.html">Produits</a>
+            <a href="livraison.html">Livraison</a>
+            <a href="apropos.html" class="active">À propos</a>
+            <a href="contact.html">Contact</a>
+            <a href="application.html">App Android</a>
+        </div>
+        <div style="width:42px;"></div>
+    </nav>
+
+    <div class="container">
+        <h1>Qui sommes-nous ?</h1>
+
+        <div class="president-section">
+            <h3><i class="fas fa-user-tie"></i> Le mot du fondateur</h3>
+            <p>"Notre mission est de vous offrir des produits naturels d'exception, issus de savoir-faire traditionnels."</p>
+        </div>
+
+        <p>Notre entreprise est née de la passion pour les produits authentiques et le respect de la nature. Nous travaillons main dans la main avec des producteurs locaux pour vous proposer une sélection de miels, huiles et autres trésors naturels.</p>
+
+        <h2><i class="fas fa-map-marker-alt"></i> Nos adresses</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3><i class="fas fa-building"></i> Siège social</h3>
+                <p>Adresse principale - Ville, Pays</p>
+            </div>
+            <div class="info-card">
+                <h3><i class="fas fa-store"></i> Point de vente</h3>
+                <p>Adresse du magasin - Ville, Pays<br>Ouvert du lundi au samedi, 10h-19h</p>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-leaf"></i> Nos produits</h2>
+        <div class="products-list-container">
+            <div>
+                <h3 style="color:var(--primary-dark); margin-bottom:15px;">🍯 Miels</h3>
+                <ul class="product-list">
+                    <li><i class="fas fa-check"></i> Miel toutes fleurs</li>
+                    <li><i class="fas fa-check"></i> Miel d'eucalyptus</li>
+                    <li><i class="fas fa-check"></i> Miel de montagne</li>
+                    <li><i class="fas fa-check"></i> Miel à la gelée royale</li>
+                </ul>
+            </div>
+            <div>
+                <h3 style="color:var(--primary-dark); margin-bottom:15px;">🫒 Huiles & autres</h3>
+                <ul class="product-list">
+                    <li><i class="fas fa-check"></i> Huile d'argan (alimentaire/cosmétique)</li>
+                    <li><i class="fas fa-check"></i> Huile d'olive vierge</li>
+                    <li><i class="fas fa-check"></i> Amlou traditionnel</li>
+                    <li><i class="fas fa-check"></i> Gomme arabique, musc, safran</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <strong>Nom de l'entreprise</strong><br>
+        📍 Adresse postale - Ville, Pays<br>
+        📞 <a href="tel:+212633548605">+212 6 33 54 86 05</a> · 📢 <a href="cgv.html">Conditions Générales</a> · ✉️ <a href="mailto:contact@example.com">contact@example.com</a>
+        <p style="margin-top:10px;opacity:.4;font-size:.7rem">© 2026 Nom de l'entreprise · Tous droits réservés</p>
+    </footer>
+
+    <script>
+        let lastScroll = 0;
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>

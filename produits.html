@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - Nom de l'entreprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d7a4f;
+            --primary-light: #e8f5ee;
+            --primary-dark: #1a5535;
+            --background: #faf8f4;
+            --accent: #c8922a;
+            --text: #1c2b1e;
+            --text-muted: #6b7c6e;
+            --border: #e4ede7;
+            --white: #ffffff;
+            --shadow: 0 4px 24px rgba(45,122,79,0.1);
+            --shadow-lg: 0 16px 48px rgba(45,122,79,0.18);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+        /* ----- NAVBAR DYNAMIQUE ----- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(250,248,244,0.94);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            flex-wrap: wrap;
+            gap: 15px;
+            transition: transform 0.3s ease;
+        }
+        .nav-hidden {
+            transform: translateY(-100%);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-logo img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+        .nav-brand small {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        @media(max-width:850px){
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                border-top: 1px solid var(--border);
+                padding-top: 10px;
+                gap: 15px;
+            }
+        }
+        .cart-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+            white-space: nowrap;
+        }
+        .cart-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(45,122,79,0.3);
+        }
+        .cart-count {
+            position: absolute;
+            top: -7px;
+            right: -7px;
+            background: var(--accent);
+            color: #fff;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            padding: 0 4px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-count.bump { animation: bump 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes bump { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.55); } }
+
+        /* ----- HERO ----- */
+        .hero {
+            padding: 52px 24px 36px;
+            text-align: center;
+            background: linear-gradient(155deg, var(--primary-light) 0%, var(--background) 55%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='30,2 56,16 56,44 30,58 4,44 4,16' fill='%232d7a4f' fill-opacity='0.04'/%3E%3C/svg%3E");
+        }
+        .hero h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.9rem,5vw,3rem);
+            font-weight: 300;
+            color: var(--primary-dark);
+            line-height: 1.2;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .hero h1 em { font-style: italic; color: var(--primary); }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 0.93rem;
+            max-width: 460px;
+            margin: 0 auto 22px;
+            line-height: 1.7;
+            position: relative;
+        }
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            position: relative;
+        }
+        .h-badge {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 7px 16px;
+            font-size: 0.75rem;
+            color: var(--primary-dark);
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+
+        /* ----- FILTRES ----- */
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            padding: 28px 20px 14px;
+        }
+        .f-btn {
+            padding: 9px 20px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            border: 1.5px solid var(--border);
+            background: var(--white);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .f-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .f-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(45,122,79,0.25);
+        }
+
+        /* ----- GRILLE PRODUITS (flexbox centrée) ----- */
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 24px 60px;
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+        .sec-lbl {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 0 4px;
+        }
+        .sec-lbl::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .sec-lbl span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ----- CARTE PRODUIT ----- */
+        .card {
+            width: 230px;
+            background: var(--white);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            transition: transform 0.25s, box-shadow 0.25s, opacity 0.5s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            border: 1.5px solid transparent;
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--border);
+        }
+        .card-img-wrap {
+            position: relative;
+            overflow: hidden;
+            height: 190px;
+            background: var(--primary-light);
+        }
+        .card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.45s;
+        }
+        .card:hover .card-img-wrap img { transform: scale(1.07); }
+        .card-cat {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 0.67rem;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            padding: 4px 11px;
+            border-radius: 50px;
+            backdrop-filter: blur(8px);
+        }
+        .card-min {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(26,85,53,0.82);
+            color: #fff;
+            font-size: 0.63rem;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 50px;
+        }
+        .card-body {
+            padding: 14px 16px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .card-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.12rem;
+            font-weight: 600;
+            color: var(--text);
+            direction: rtl;
+        }
+        .card-name-fr {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .card-prices {
+            margin-top: auto;
+            padding-top: 9px;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .price-kg { font-size:0.72rem; color:var(--text-muted); }
+        .price-from {
+            font-size:0.93rem; font-weight:700; color:var(--primary);
+        }
+        .price-from small { font-size:0.7rem; font-weight:400; color:var(--text-muted); }
+        .card-cta {
+            width:100%; margin-top:10px; padding:9px 0;
+            background:var(--primary-light); border:1.5px solid var(--primary);
+            color:var(--primary-dark); border-radius:10px; font-size:0.8rem; font-weight:600;
+            cursor:pointer; transition:all 0.2s;
+            display:flex; align-items:center; justify-content:center; gap:6px;
+        }
+        .card-cta:hover { background:var(--primary); color:#fff; }
+
+        .tag-amlou { background:rgba(254,243,226,0.92); color:#92400e; }
+        .tag-miel { background:rgba(255,249,196,0.92); color:#78350f; }
+        .tag-huile { background:rgba(209,250,229,0.92); color:#065f46; }
+        .tag-naturel { background:rgba(237,233,254,0.92); color:#4c1d95; }
+
+        /* ----- POPUP ----- */
+        .overlay{
+            position:fixed; inset:0; background:rgba(20,35,22,0.6); z-index:200;
+            display:flex; align-items:center; justify-content:center; padding:16px;
+            opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(5px);
+        }
+        .overlay.open{ opacity:1; pointer-events:all; }
+        .popup{
+            background:var(--white); border-radius:24px; max-width:540px; width:100%;
+            max-height:92vh; overflow-y:auto; box-shadow:0 32px 80px rgba(0,0,0,0.22);
+            transform:translateY(28px) scale(0.96); transition:transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .overlay.open .popup{ transform:translateY(0) scale(1); }
+        .popup-img-wrap{ position:relative; }
+        .popup-img{
+            width:100%; height:255px; object-fit:cover; display:block;
+            background:var(--primary-light);
+        }
+        .popup-close{
+            position:absolute; top:14px; right:14px; width:36px; height:36px;
+            border-radius:50%; background:rgba(255,255,255,0.92); border:none;
+            cursor:pointer; font-size:1rem; color:var(--text); box-shadow:0 2px 10px rgba(0,0,0,0.12);
+            transition:all 0.2s;
+        }
+        .popup-close:hover{ transform:scale(1.1); }
+        .popup-body{ padding:22px 26px 26px; }
+        .popup-tag{
+            font-size:0.7rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+            color:var(--primary); margin-bottom:5px;
+        }
+        .popup-name{
+            font-family:'Cormorant Garamond',serif; font-size:1.85rem; font-weight:600;
+            line-height:1.2; direction:rtl; color:var(--text);
+        }
+        .popup-name-fr{
+            font-size:0.85rem; color:var(--text-muted); font-style:italic; margin-top:3px;
+        }
+        .popup-desc{
+            font-size:0.83rem; line-height:1.7; color:var(--text-muted);
+            margin:13px 0 16px; padding-bottom:16px; border-bottom:1px solid var(--border);
+        }
+        .min-notice{
+            display:flex; align-items:center; gap:8px; background:#fef3e2;
+            border:1px solid rgba(200,146,42,0.2); border-radius:10px;
+            padding:9px 13px; margin-bottom:16px; font-size:0.78rem; color:#78350f;
+            font-weight:500;
+        }
+        .field-lbl{
+            font-size:0.7rem; font-weight:700; letter-spacing:0.6px; text-transform:uppercase;
+            color:var(--text); margin-bottom:8px; display:block;
+        }
+        .qty-sec{ margin-bottom:20px; }
+        .qty-row{
+            display:flex; align-items:center; gap:14px; margin-top:8px;
+        }
+        .qty-ctrl{
+            display:flex; align-items:center; border:1.5px solid var(--border);
+            border-radius:50px; overflow:hidden; background:var(--white);
+        }
+        .qty-ctrl button{
+            width:40px; height:40px; border:none; background:none; font-size:1.3rem;
+            cursor:pointer; color:var(--primary-dark); transition:background 0.2s;
+        }
+        .qty-ctrl button:hover{ background:var(--primary-light); }
+        .qty-ctrl span{
+            width:48px; text-align:center; font-size:0.95rem; font-weight:700; color:var(--text);
+        }
+        .qty-info{ margin-left:auto; text-align:right; }
+        .qty-total{ font-size:1.15rem; font-weight:700; color:var(--primary); }
+        .qty-desc{ font-size:0.72rem; color:var(--text-muted); display:block; margin-top:1px; }
+        .popup-add{
+            width:100%; padding:14px; background:var(--primary); color:#fff; border:none;
+            border-radius:13px; font-size:1rem; font-weight:700; cursor:pointer;
+            transition:all 0.25s; display:flex; align-items:center; justify-content:center; gap:10px;
+        }
+        .popup-add:hover{ background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 10px 28px rgba(45,122,79,0.3); }
+
+        /* ----- PANIER ----- */
+        .cart-back{
+            position:fixed; inset:0; background:rgba(20,35,22,0.45); z-index:299;
+            opacity:0; pointer-events:none; transition:opacity 0.3s;
+        }
+        .cart-back.open{ opacity:1; pointer-events:all; }
+        .cart-panel{
+            position:fixed; right:0; top:0; bottom:0; width:min(400px,100vw);
+            background:var(--white); z-index:300; box-shadow:-10px 0 50px rgba(0,0,0,0.14);
+            transform:translateX(100%); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+            display:flex; flex-direction:column;
+        }
+        .cart-panel.open{ transform:translateX(0); }
+        .cart-hdr{
+            padding:22px 22px 14px; border-bottom:1px solid var(--border);
+            display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+        }
+        .cart-ttl{ font-family:'Cormorant Garamond',serif; font-size:1.55rem; font-weight:600; }
+        .cart-cls{
+            width:36px; height:36px; border-radius:50%; border:1.5px solid var(--border);
+            background:none; cursor:pointer; font-size:1rem; color:var(--text-muted);
+            transition:all 0.2s; display:flex; align-items:center; justify-content:center;
+        }
+        .cart-cls:hover{ background:var(--primary-light); color:var(--primary); border-color:var(--primary); }
+        .cart-items{ flex:1; overflow-y:auto; padding:14px 20px; }
+        .cart-empty{ text-align:center; padding:50px 20px; color:var(--text-muted); }
+        .cart-empty-icon{ font-size:2.8rem; margin-bottom:10px; }
+        .ci{
+            display:flex; gap:12px; padding:13px 0; border-bottom:1px solid var(--border);
+            align-items:flex-start;
+        }
+        .ci:last-child{ border-bottom:none; }
+        .ci-img{
+            width:60px; height:60px; border-radius:10px; object-fit:cover;
+            background:var(--primary-light); flex-shrink:0;
+        }
+        .ci-info{ flex:1; min-width:0; }
+        .ci-name{
+            font-size:0.84rem; font-weight:600; direction:rtl; white-space:nowrap;
+            overflow:hidden; text-overflow:ellipsis;
+        }
+        .ci-fr{
+            font-size:0.72rem; color:var(--text-muted); font-style:italic; margin-bottom:3px;
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .ci-qty-badge{
+            font-size:0.7rem; color:var(--primary-dark); font-weight:600;
+            background:var(--primary-light); display:inline-block; padding:2px 8px;
+            border-radius:5px; margin-bottom:5px;
+        }
+        .ci-row{ display:flex; align-items:center; justify-content:space-between; }
+        .ci-price{ font-size:0.88rem; font-weight:700; color:var(--primary); }
+        .ci-controls{ display:flex; align-items:center; gap:5px; }
+        .ci-q{
+            display:flex; align-items:center; border:1.5px solid var(--border);
+            border-radius:50px; overflow:hidden;
+        }
+        .ci-q button{
+            width:26px; height:26px; border:none; background:none; font-size:0.9rem;
+            cursor:pointer; color:var(--primary-dark); transition:background 0.15s;
+        }
+        .ci-q button:hover{ background:var(--primary-light); }
+        .ci-q span{ width:26px; text-align:center; font-size:0.78rem; font-weight:700; }
+        .ci-del{
+            background:none; border:none; color:#c0c9c2; cursor:pointer; font-size:0.82rem;
+            padding:4px; transition:color 0.2s;
+        }
+        .ci-del:hover{ color:#e53e3e; }
+        .cart-ftr{ padding:16px 20px 20px; border-top:1px solid var(--border); flex-shrink:0; }
+        .cart-sum{ background:var(--primary-light); border-radius:12px; padding:14px 16px; margin-bottom:12px; }
+        .cart-sum-row{ display:flex; justify-content:space-between; align-items:center; }
+        .cart-sum-lbl{ font-size:0.82rem; color:var(--text-muted); }
+        .cart-total{ font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:var(--primary-dark); }
+        .cart-sub{ font-size:0.71rem; color:var(--text-muted); margin-top:2px; }
+        .cart-note{
+            width:100%; padding:11px 14px; border:1.5px solid var(--border);
+            border-radius:10px; font-size:0.83rem; font-family:'DM Sans',sans-serif;
+            color:var(--text); background:var(--background); resize:none; outline:none;
+            transition:border 0.2s; margin-bottom:11px; line-height:1.5;
+        }
+        .cart-note:focus{ border-color:var(--primary); }
+        .btn-wa{
+            width:100%; padding:14px; background:#25d366; color:#fff; border:none;
+            border-radius:12px; font-size:0.95rem; font-weight:700; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            transition:all 0.25s;
+        }
+        .btn-wa:hover{ background:#1ebe5c; transform:translateY(-1px); box-shadow:0 8px 24px rgba(37,211,102,0.35); }
+        .btn-wa svg{ width:22px; height:22px; fill:#fff; }
+
+        /* ----- FLOATING WHATSAPP ----- */
+        .wa-float{
+            position:fixed; bottom:26px; right:26px; z-index:150; width:56px; height:56px;
+            border-radius:50%; background:#25d366; display:flex; align-items:center;
+            justify-content:center; box-shadow:0 6px 20px rgba(37,211,102,0.45);
+            cursor:pointer; transition:all 0.25s; border:none; animation:wap 2.8s infinite;
+        }
+        .wa-float:hover{ transform:scale(1.1); }
+        @keyframes wap{ 0%,100%{ box-shadow:0 6px 20px rgba(37,211,102,0.45); } 50%{ box-shadow:0 6px 36px rgba(37,211,102,0.65),0 0 0 8px rgba(37,211,102,0.1); } }
+        .wa-float svg{ width:27px; height:27px; fill:#fff; }
+
+        /* ----- TOAST ----- */
+        .toast{
+            position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px);
+            background:var(--primary-dark); color:#fff; padding:11px 22px; border-radius:50px;
+            font-size:0.83rem; font-weight:600; z-index:500; opacity:0; transition:all 0.3s;
+            pointer-events:none; white-space:nowrap; box-shadow:0 6px 20px rgba(0,0,0,0.2);
+        }
+        .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+        footer {
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.65);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 0.8rem;
+        }
+        footer a { color: rgba(200,169,100,0.9); text-decoration: none; }
+        footer strong { color: #fff; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .card:nth-child(odd) { animation-delay: 0.1s; }
+        .card:nth-child(even) { animation-delay: 0.2s; }
+
+        @media(max-width: 600px){
+            .grid { gap: 15px; padding: 10px; }
+            .card { width: calc(50% - 10px); min-width: 140px; }
+            .card-img-wrap { height: 140px; }
+            .card-body { padding: 10px; }
+            .card-name { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="mainNav">
+        <div class="nav-logo">
+            <img src="images/logo-entreprise.jpg" alt="Logo">
+            <div class="nav-brand">
+                <span>Nom de l'entreprise</span>
+                <small>Produits naturels · Local</small>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Accueil</a>
+            <a href="produits.html" class="active">Produits</a>
+            <a href="livraison.html">Livraison</a>
+            <a href="apropos.html">À propos</a>
+            <a href="contact.html">Contact</a>
+            <a href="application.html">App Android</a>
+        </div>
+        <button class="cart-btn" onclick="openCart()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+            Panier
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </nav>
+
+    <div class="hero">
+        <h1>L'authenticité locale,<br/><em>directement chez vous</em></h1>
+        <p>Miels, huiles et produits naturels sélectionnés avec soin.</p>
+        <div class="hero-badges">
+            <div class="h-badge">🌿 Plus de 50 produits</div>
+            <div class="h-badge">⚖️ Conditionnement au choix</div>
+            <div class="h-badge">📲 Commande via WhatsApp</div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="f-btn active" onclick="filterCat('all',this)">✦ Tous</button>
+        <button class="f-btn" onclick="filterCat('amlou',this)">🥜 Amlou</button>
+        <button class="f-btn" onclick="filterCat('miel',this)">🍯 Miels</button>
+        <button class="f-btn" onclick="filterCat('huile',this)">🫒 Huiles</button>
+        <button class="f-btn" onclick="filterCat('naturel',this)">🌿 Naturels</button>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <!-- POPUP -->
+    <div class="overlay" id="popupOverlay" onclick="handleOvClick(event)">
+        <div class="popup">
+            <div class="popup-img-wrap">
+                <img class="popup-img" id="pImg" src="" alt="">
+                <button class="popup-close" onclick="closePopup()">✕</button>
+            </div>
+            <div class="popup-body">
+                <div class="popup-tag" id="pTag"></div>
+                <div class="popup-name" id="pName"></div>
+                <div class="popup-name-fr" id="pFr"></div>
+                <p class="popup-desc" id="pDesc"></p>
+                <div class="min-notice" id="pMinNotice"><span>📦</span><span id="pMinText"></span></div>
+                <div class="qty-sec" id="pQtySec">
+                    <span class="field-lbl" id="pQtyLbl">Quantité</span>
+                    <div class="qty-row">
+                        <div class="qty-ctrl">
+                            <button onclick="chQty(-1)">−</button>
+                            <span id="pQtyVal">0.25</span>
+                            <button onclick="chQty(1)">+</button>
+                        </div>
+                        <div class="qty-info">
+                            <div class="qty-total" id="pTotal">— DH</div>
+                            <small class="qty-desc" id="pQtyDesc"></small>
+                        </div>
+                    </div>
+                </div>
+                <button class="popup-add" onclick="addToCart()">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                    Ajouter au panier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANIER LATÉRAL -->
+    <div class="cart-back" id="cartBack" onclick="closeCart()"></div>
+    <div class="cart-panel" id="cartPanel">
+        <div class="cart-hdr">
+            <div class="cart-ttl">Mon panier</div>
+            <button class="cart-cls" onclick="closeCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItemsEl"><div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Votre panier est vide</p></div></div>
+        <div class="cart-ftr">
+            <div class="cart-sum">
+                <div class="cart-sum-row">
+                    <span class="cart-sum-lbl">Total</span>
+                    <span class="cart-total" id="cartTotalEl">0 DH</span>
+                </div>
+                <div class="cart-sub" id="cartSub"></div>
+            </div>
+            <textarea class="cart-note" id="cartNote" rows="2" placeholder="📍 Adresse de livraison (obligatoire) · Note…"></textarea>
+            <button class="btn-wa" onclick="sendWA()">
+                <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Commander via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- BOUTON WHATSAPP FLOTTANT -->
+    <button class="wa-float" onclick="window.open('https://wa.me/0633548605','_blank')">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </button>
+    <div class="toast" id="toast"></div>
+
+    <footer>
+        <strong>Nom de l'entreprise</strong><br>
+        📍 Adresse postale - Ville, Pays<br>
+        📞 <a href="tel:+212633548605">+212 6 33 54 86 05</a> · 📢 <a href="cgv.html">Conditions Générales</a> · ✉️ <a href="mailto:contact@example.com">contact@example.com</a>
+        <p style="margin-top:10px;opacity:.4;font-size:.7rem">© 2026 Nom de l'entreprise · Tous droits réservés</p>
+    </footer>
+
+    <script>
+        // ===== DONNÉES PRODUITS (12 par catégorie) =====
+        const P = [
+            // Amlou (12)
+            { id:1, cat:'amlou', name:'أملو تقليدي', fr:'Amlou traditionnel', img:'images/amlou.jpg', type:'weight', ppu:35, desc:'Pâte d’amandes, miel et huile d’argan.' },
+            { id:2, cat:'amlou', name:'أملو بالكاجو', fr:'Amlou cajou', img:'images/amlou.jpg', type:'weight', ppu:50, desc:'Onctueux à la noix de cajou.' },
+            { id:3, cat:'amlou', name:'أملو باللوز', fr:'Amlou amande', img:'images/amlou.jpg', type:'weight', ppu:45, desc:'Pur amande.' },
+            { id:4, cat:'amlou', name:'أملو بالشوكولاتة', fr:'Amlou chocolat', img:'images/amlou.jpg', type:'weight', ppu:55, desc:'Amlou cacao.' },
+            { id:5, cat:'amlou', name:'أملو بالبندق', fr:'Amlou noisette', img:'images/amlou.jpg', type:'weight', ppu:52, desc:'Noisette et miel.' },
+            { id:6, cat:'amlou', name:'أملو بالجوز', fr:'Amlou noix', img:'images/amlou.jpg', type:'weight', ppu:48, desc:'Noix et huile d\'argan.' },
+            { id:7, cat:'amlou', name:'أملو بالسمسم', fr:'Amlou sésame', img:'images/amlou.jpg', type:'weight', ppu:38, desc:'Sésame grillé.' },
+            { id:8, cat:'amlou', name:'أملو بالزنجلان', fr:'Amlou sésame noir', img:'images/amlou.jpg', type:'weight', ppu:42, desc:'Sésame noir.' },
+            { id:9, cat:'amlou', name:'أملو بالعسل', fr:'Amlou au miel pur', img:'images/amlou.jpg', type:'weight', ppu:60, desc:'Miel de montagne.' },
+            { id:10, cat:'amlou', name:'أملو بالقهوة', fr:'Amlou café', img:'images/amlou.jpg', type:'weight', ppu:53, desc:'Arôme café.' },
+            { id:11, cat:'amlou', name:'أملو بالتمر', fr:'Amlou datte', img:'images/amlou.jpg', type:'weight', ppu:57, desc:'Dattes et amandes.' },
+            { id:12, cat:'amlou', name:'أملو بالفستق', fr:'Amlou pistache', img:'images/amlou.jpg', type:'weight', ppu:65, desc:'Pistache et miel.' },
+            // Miels (12)
+            { id:13, cat:'miel', name:'عسل الجبال', fr:'Miel de montagne', img:'images/honey.jpg', type:'weight', ppu:40, desc:'Toutes fleurs.' },
+            { id:14, cat:'miel', name:'عسل الأوكالبتوس', fr:'Miel d\'eucalyptus', img:'images/honey.jpg', type:'weight', ppu:45, desc:'Boisé.' },
+            { id:15, cat:'miel', name:'عسل بالحبة السوداء', fr:'Miel à la nigelle', img:'images/honey.jpg', type:'weight', ppu:55, desc:'Nigelle.' },
+            { id:16, cat:'miel', name:'عسل السدر', fr:'Miel de jujubier', img:'images/honey.jpg', type:'weight', ppu:70, desc:'Prestigieux.' },
+            { id:17, cat:'miel', name:'عسل الزعتر', fr:'Miel de thym', img:'images/honey.jpg', type:'weight', ppu:60, desc:'Thym sauvage.' },
+            { id:18, cat:'miel', name:'عسل الخروب', fr:'Miel de caroube', img:'images/honey.jpg', type:'weight', ppu:50, desc:'Caroube.' },
+            { id:19, cat:'miel', name:'عسل الليمون', fr:'Miel de citronnier', img:'images/honey.jpg', type:'weight', ppu:42, desc:'Agrume.' },
+            { id:20, cat:'miel', name:'عسل الكاليبتوس', fr:'Miel d\'eucalyptus', img:'images/honey.jpg', type:'weight', ppu:45, desc:'Mentholé.' },
+            { id:21, cat:'miel', name:'عسل الدغموس', fr:'Miel d\'euphorbe', img:'images/honey.jpg', type:'weight', ppu:80, desc:'Rare.' },
+            { id:22, cat:'miel', name:'عسل الحندوق', fr:'Miel de hêtre', img:'images/honey.jpg', type:'weight', ppu:35, desc:'Doux.' },
+            { id:23, cat:'miel', name:'عسل الزقوم', fr:'Miel d\'arganier', img:'images/honey.jpg', type:'weight', ppu:65, desc:'Arganier.' },
+            { id:24, cat:'miel', name:'عسل الربيع', fr:'Miel de printemps', img:'images/honey.jpg', type:'weight', ppu:38, desc:'Polyfloral.' },
+            // Huiles (12)
+            { id:25, cat:'huile', name:'زيت أركان غذائي', fr:'Huile d\'argan alim.', img:'images/oil.jpg', type:'volume', ppu:120, desc:'Vierge.' },
+            { id:26, cat:'huile', name:'زيت الزيتون البكر', fr:'Huile d\'olive', img:'images/oil.jpg', type:'volume', ppu:30, desc:'Fruitée.' },
+            { id:27, cat:'huile', name:'زيت أركان تجميل', fr:'Huile d\'argan cosm.', img:'images/oil.jpg', type:'volume', ppu:110, desc:'Pure.' },
+            { id:28, cat:'huile', name:'زيت اللوز الحلو', fr:'Huile d\'amande douce', img:'images/oil.jpg', type:'volume', ppu:40, desc:'Adoucissante.' },
+            { id:29, cat:'huile', name:'زيت الجوجوبا', fr:'Huile de jojoba', img:'images/oil.jpg', type:'volume', ppu:50, desc:'Cheveux.' },
+            { id:30, cat:'huile', name:'زيت الخروع', fr:'Huile de ricin', img:'images/oil.jpg', type:'volume', ppu:35, desc:'Croissance.' },
+            { id:31, cat:'huile', name:'زيت جوز الهند', fr:'Huile de coco', img:'images/oil.jpg', type:'volume', ppu:45, desc:'Cuisine.' },
+            { id:32, cat:'huile', name:'زيت السمسم', fr:'Huile de sésame', img:'images/oil.jpg', type:'volume', ppu:38, desc:'Antioxydant.' },
+            { id:33, cat:'huile', name:'زيت النعناع', fr:'Huile de menthe', img:'images/oil.jpg', type:'volume', ppu:30, desc:'Rafraîchissante.' },
+            { id:34, cat:'huile', name:'زيت اللافندر', fr:'Huile de lavande', img:'images/oil.jpg', type:'volume', ppu:32, desc:'Apaisante.' },
+            { id:35, cat:'huile', name:'زيت شجرة الشاي', fr:'Huile tea tree', img:'images/oil.jpg', type:'volume', ppu:38, desc:'Antibactérienne.' },
+            { id:36, cat:'huile', name:'زيت الورد', fr:'Huile de rose', img:'images/oil.jpg', type:'volume', ppu:55, desc:'Parfumée.' },
+            // Naturels (12)
+            { id:37, cat:'naturel', name:'الصمغ العربي', fr:'Gomme arabique', img:'images/naturel.jpg', type:'unit', ppu:25, ul:'sachet 100g', desc:'Fibres.' },
+            { id:38, cat:'naturel', name:'المسك الأسود', fr:'Musc noir', img:'images/naturel.jpg', type:'unit', ppu:150, ul:'flacon', desc:'Parfum.' },
+            { id:39, cat:'naturel', name:'زعفران', fr:'Safran', img:'images/naturel.jpg', type:'unit', ppu:30, ul:'sachet 1g', desc:'Safran pur.' },
+            { id:40, cat:'naturel', name:'لبان الدكر', fr:'Encens', img:'images/naturel.jpg', type:'unit', ppu:20, ul:'sachet 50g', desc:'Purification.' },
+            { id:41, cat:'naturel', name:'الكحل الأثمد', fr:'Khôl antimoine', img:'images/naturel.jpg', type:'unit', ppu:80, ul:'étui', desc:'Traditionnel.' },
+            { id:42, cat:'naturel', name:'مسك الرمان', fr:'Musc grenade', img:'images/naturel.jpg', type:'unit', ppu:180, ul:'flacon', desc:'Fruité.' },
+            { id:43, cat:'naturel', name:'العكبر', fr:'Propolis', img:'images/naturel.jpg', type:'unit', ppu:40, ul:'sachet 30g', desc:'Antibiotique naturel.' },
+            { id:44, cat:'naturel', name:'خل التفاح', fr:'Vinaigre de cidre', img:'images/naturel.jpg', type:'unit', ppu:20, ul:'bouteille 250ml', desc:'Non filtré.' },
+            { id:45, cat:'naturel', name:'ماء الورد', fr:'Eau de rose', img:'images/naturel.jpg', type:'unit', ppu:15, ul:'flacon 100ml', desc:'Tonique.' },
+            { id:46, cat:'naturel', name:'القطران', fr:'Goudron végétal', img:'images/naturel.jpg', type:'unit', ppu:25, ul:'flacon 50ml', desc:'Soins peau.' },
+            { id:47, cat:'naturel', name:'السواك', fr:'Siwak', img:'images/naturel.jpg', type:'unit', ppu:10, ul:'bâtonnet', desc:'Dentifrice naturel.' },
+            { id:48, cat:'naturel', name:'الحناء', fr:'Henné', img:'images/naturel.jpg', type:'unit', ppu:12, ul:'sachet 100g', desc:'Coloration.' },
+        ];
+
+        const CAT = {
+            amlou: { label:'🥜 Amlou', tag:'tag-amlou', txt:'Amlou' },
+            miel: { label:'🍯 Miels', tag:'tag-miel', txt:'Miel' },
+            huile: { label:'🫒 Huiles', tag:'tag-huile', txt:'Huile' },
+            naturel: { label:'🌿 Naturels', tag:'tag-naturel', txt:'Naturel' },
+        };
+
+        // Helpers
+        const step = (t) => t==='weight' ? '250g' : t==='volume' ? '250ml' : null;
+        const bigUnit = (t) => t==='weight' ? 'kg' : t==='volume' ? 'L' : null;
+        const ppu4 = (p) => (p.ppu * 4);
+        const isWV = (p) => p.type==='weight' || p.type==='volume';
+        const calcPrice = (p,q) => isWV(p) ? (q * p.ppu * 4) : (q * p.ppu);
+        function fmtQty(p,q) {
+            if(p.type==='weight') return `${q} kg`;
+            if(p.type==='volume') return `${q} L`;
+            return '';
+        }
+
+        // État
+        let cart = [], cur = null, qty = 1;
+
+        // Rendu grille
+        function renderGrid(f='all') {
+            const g = document.getElementById('grid');
+            g.innerHTML = '';
+            ['amlou','miel','huile','naturel'].forEach(cat => {
+                const items = P.filter(p => p.cat === cat && (f==='all' || f===cat));
+                if(!items.length) return;
+                const lbl = document.createElement('div');
+                lbl.className = 'sec-lbl';
+                lbl.innerHTML = `<span>${CAT[cat].label}</span>`;
+                g.appendChild(lbl);
+                items.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.onclick = () => openPopup(p);
+                    const wv = isWV(p);
+                    const priceKgHtml = wv ? `<div class="price-kg">${ppu4(p)} DH / ${bigUnit(p.type)}</div>` : '';
+                    const fromHtml = wv
+                        ? `<div class="price-from">${p.ppu} DH <small>/ ${step(p.type)}</small></div>`
+                        : `<div class="price-from">${p.ppu} DH <small>/ ${p.ul || 'unité'}</small></div>`;
+                    const minBadge = wv ? `<div class="card-min">Min ${step(p.type)}</div>` : '';
+                    card.innerHTML = `
+                        <div class="card-img-wrap">
+                            <img src="${p.img}" alt="${p.fr}" loading="lazy" onerror="this.style.display='none'">
+                            <span class="card-cat ${CAT[p.cat].tag}">${CAT[p.cat].txt}</span>${minBadge}
+                        </div>
+                        <div class="card-body">
+                            <div class="card-name">${p.name}</div>
+                            <div class="card-name-fr">${p.fr}</div>
+                            <div class="card-prices">${priceKgHtml}${fromHtml}</div>
+                            <button class="card-cta" onclick="event.stopPropagation();openPopup(P.find(x=>x.id===${p.id}))">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                                Choisir la quantité
+                            </button>
+                        </div>`;
+                    g.appendChild(card);
+                });
+            });
+        }
+        renderGrid();
+
+        function filterCat(f, btn) {
+            document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderGrid(f);
+        }
+
+        // POPUP
+        function openPopup(p) {
+            cur = p;
+            qty = isWV(p) ? 0.25 : 1;
+            document.getElementById('pImg').src = p.img;
+            document.getElementById('pTag').textContent = CAT[p.cat].txt.toUpperCase();
+            document.getElementById('pName').textContent = p.name;
+            document.getElementById('pFr').textContent = p.fr;
+            document.getElementById('pDesc').textContent = p.desc;
+            const wv = isWV(p);
+            const notice = document.getElementById('pMinNotice');
+            if(wv) {
+                notice.style.display = 'flex';
+                document.getElementById('pMinText').textContent = `Commande minimum : ${step(p.type)} — par multiples de ${step(p.type)}.`;
+            } else {
+                notice.style.display = 'none';
+            }
+            updQty();
+            document.getElementById('popupOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updQty() {
+            const p = cur; if(!p) return;
+            document.getElementById('pQtyVal').textContent = qty;
+            document.getElementById('pTotal').textContent = calcPrice(p,qty) + ' DH';
+            if(isWV(p)) {
+                document.getElementById('pQtyDesc').textContent = fmtQty(p,qty) + ` (${ppu4(p)} DH/${bigUnit(p.type)})`;
+            } else {
+                const lbl = p.ul || 'unité';
+                document.getElementById('pQtyDesc').textContent = qty > 1 ? `${qty} ${lbl}s` : `1 ${lbl}`;
+            }
+        }
+
+        function chQty(d) {
+            const s = isWV(cur) ? 0.25 : 1;
+            qty = Math.max(s, qty + (d * s));
+            qty = Math.round(qty * 100) / 100;
+            updQty();
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function handleOvClick(e) {
+            if(e.target === document.getElementById('popupOverlay')) closePopup();
+        }
+
+        // AJOUT AU PANIER
+        function addToCart() {
+            if(!cur) return;
+            const p = cur;
+            const wv = isWV(p);
+            const key = `${p.id}`;
+            const ex = cart.find(i => i.key === key);
+            if(ex) { ex.qty += qty; }
+            else { cart.push({ key, p, qty, wv, unitLabel: p.ul || 'unité' }); }
+            updCartUI();
+            bumpCount();
+            closePopup();
+            showToast(`✓ ${p.fr} ajouté au panier`);
+        }
+
+        // PANIER UI
+        function updCartUI() {
+            const total = cart.reduce((s,i) => s + calcPrice(i.p, i.qty), 0);
+            const count = cart.length;
+            document.getElementById('cartTotalEl').textContent = total + ' DH';
+            document.getElementById('cartCount').textContent = count;
+            document.getElementById('cartSub').textContent = count ? `${count} article${count>1?'s':''}` : ' ';
+            const el = document.getElementById('cartItemsEl');
+            if(!cart.length) {
+                el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Votre panier est vide</p></div>';
+                return;
+            }
+            el.innerHTML = cart.map((item, idx) => {
+                const sub = calcPrice(item.p, item.qty);
+                const ql = item.wv ? fmtQty(item.p, item.qty) : `${item.qty} ${item.unitLabel}${item.qty>1?'s':''}`;
+                return `<div class="ci">
+                    <img class="ci-img" src="${item.p.img}" alt="" onerror="this.style.background='#e8f5ee';this.style.display='none'">
+                    <div class="ci-info">
+                        <div class="ci-name">${item.p.name}</div>
+                        <div class="ci-fr">${item.p.fr}</div>
+                        <div class="ci-qty-badge">${ql}</div>
+                        <div class="ci-row">
+                            <span class="ci-price">${sub} DH</span>
+                            <div class="ci-controls">
+                                <div class="ci-q">
+                                    <button onclick="chCartQty(${idx},-1)">−</button>
+                                    <span>${item.qty}</span>
+                                    <button onclick="chCartQty(${idx},1)">+</button>
+                                </div>
+                                <button class="ci-del" onclick="rmCart(${idx})">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function chCartQty(i,d) {
+            const item = cart[i];
+            const s = item.wv ? 0.25 : 1;
+            item.qty = Math.max(s, item.qty + (d*s));
+            item.qty = Math.round(item.qty*100)/100;
+            updCartUI();
+        }
+        function rmCart(i) { cart.splice(i,1); updCartUI(); }
+        function bumpCount() {
+            const el = document.getElementById('cartCount');
+            el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump');
+        }
+        function openCart() {
+            document.getElementById('cartPanel').classList.add('open');
+            document.getElementById('cartBack').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCart() {
+            document.getElementById('cartPanel').classList.remove('open');
+            document.getElementById('cartBack').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ENVOI WHATSAPP
+        function sendWA() {
+            if(!cart.length) { showToast('⚠️ Panier vide'); return; }
+            const note = document.getElementById('cartNote').value.trim();
+            if(!note) { showToast('⚠️ Veuillez saisir votre adresse'); document.getElementById('cartNote').focus(); return; }
+            const total = cart.reduce((s,i) => s + calcPrice(i.p, i.qty), 0);
+            let msg = `🌿 *Commande*`;
+            cart.forEach(item => {
+                const ql = item.wv ? fmtQty(item.p, item.qty) : `${item.qty} ${item.unitLabel}${item.qty>1?'s':''}`;
+                const sub = calcPrice(item.p, item.qty);
+                msg += `▪ *${item.p.fr}*......${item.p.name}...... Qté : ${ql} → ${sub} DH......`;
+            });
+            msg += `......💰 *Total : ${total} DH*......`;
+            if(note) msg += `...... Adresse : ${note}......`;
+            msg += `...... Merci de confirmer 🙏`;
+            window.open(`https://wa.me/0633548605?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.textContent = m; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2600);
+        }
+
+        // Gestion scroll navbar
+        let lastScroll = 0;
+        const nav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                nav.classList.add('nav-hidden');
+            } else {
+                nav.classList.remove('nav-hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        document.addEventListener('keydown', e => { if(e.key==='Escape') { closePopup(); closeCart(); } });
+    </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accueil - Nom de l'entreprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2d7a4f;
+            --primary-light: #e8f5ee;
+            --primary-dark: #1a5535;
+            --background: #faf8f4;
+            --accent: #c8922a;
+            --text: #1c2b1e;
+            --text-muted: #6b7c6e;
+            --border: #e4ede7;
+            --white: #ffffff;
+            --shadow: 0 4px 24px rgba(45,122,79,0.1);
+            --shadow-lg: 0 16px 48px rgba(45,122,79,0.18);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        /* ----- NAVBAR (sticky, unifiée) ----- */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(250,248,244,0.94);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nav-logo img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+        }
+        .nav-brand span {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.55rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            line-height: 1;
+        }
+        .nav-brand small {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+        }
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+        @media(max-width: 850px){
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                border-top: 1px solid var(--border);
+                padding-top: 10px;
+                gap: 15px;
+            }
+        }
+
+        /* ----- CONTENU PRINCIPAL ----- */
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 2rem 2.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+        .logo-rect-container {
+            margin-bottom: 1rem;
+        }
+        .logo-rect {
+            width: 150px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+        .logo-container {
+            margin-bottom: 1.5rem;
+        }
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            padding: 5px;
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.2rem;
+        }
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        .highlight {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+        .btn-produits {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 15px rgba(45,122,79,0.3);
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s;
+        }
+        .btn-produits:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(45,122,79,0.5);
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .social-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px;
+            height: 45px;
+            text-decoration: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+        .social-btn:hover { transform: scale(1.1); }
+        .facebook { background: #1877F2; }
+        .instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .youtube { background: #FF0000; }
+        .whatsapp { background: #25D366; }
+
+        footer {
+            margin-top: 40px;
+            background: var(--primary-dark);
+            color: rgba(255,255,255,0.65);
+            text-align: center;
+            padding: 28px 20px;
+            font-size: 0.8rem;
+        }
+        footer a { color: rgba(200,169,100,0.9); text-decoration: none; }
+        footer strong { color: #fff; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-logo">
+            <img src="images/logo-entreprise.jpg" alt="Logo">
+            <div class="nav-brand">
+                <span>Nom de l'entreprise</span>
+                <small>Produits naturels · Local</small>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="active">Accueil</a>
+            <a href="produits.html">Produits</a>
+            <a href="livraison.html">Livraison</a>
+            <a href="apropos.html">À propos</a>
+            <a href="contact.html">Contact</a>
+            <a href="application.html">App Android</a>
+        </div>
+        <!-- Équilibre pour l'espacement (optionnel) -->
+        <div style="width:42px;"></div>
+    </nav>
+
+    <div class="container">
+        <div class="logo-rect-container">
+            <img src="images/logo-partenaire.jpg" alt="Logo partenaire" class="logo-rect">
+        </div>
+        <div class="logo-container">
+            <img src="images/logo-entreprise.jpg" alt="Logo entreprise" class="logo">
+        </div>
+
+        <h1>Nom de l'entreprise</h1>
+        <p class="description">
+            Découvrez l'excellence de notre terroir avec notre sélection de 
+            <span class="highlight">produits naturels</span>, 
+            <span class="highlight">miels artisanaux</span> et 
+            <span class="highlight">huiles précieuses</span>. 
+            Il ne vous reste plus qu'à choisir vos produits et valider votre commande. 
+            Livraison disponible dans votre pays.
+        </p>
+
+        <a href="produits.html" class="btn-produits">
+            Découvrir notre catalogue <i class="fas fa-shopping-basket"></i>
+        </a>
+
+        <div class="social-icons">
+            <a href="#" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" class="social-btn instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i></a>
+            <a href="#" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+    </div>
+
+    <footer>
+        <strong>Nom de l'entreprise</strong><br>
+        📍 Adresse postale - Ville, Pays<br>
+        📞 <a href="tel:+212633548605">+212 6 33 54 86 05</a> · 📢 <a href="cgv.html">Conditions Générales</a> · ✉️ <a href="mailto:contact@example.com">contact@example.com</a>
+        <p style="margin-top:10px;opacity:.4;font-size:.7rem">© 2026 Nom de l'entreprise · Tous droits réservés</p>
+    </footer>
+</body>
+</html>
